@@ -48,10 +48,18 @@
 
         <!-- Main Wrapper -->
         <div class="main-wrapper">
+            <!-- Sidebar Overlay for mobile -->
+            <div class="sidebar-overlay" id="sidebarOverlay"></div>
+            
             <!-- Top Navbar -->
             <nav class="top-navbar">
-                <div class="page-title">
-                    <h1>Dashboard</h1>
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <button class="menu-toggle" id="menuToggle">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <div class="page-title">
+                        <h1>Dashboard</h1>
+                    </div>
                 </div>
                 <div class="nav-actions">
                     <div class="admin-user-profile">

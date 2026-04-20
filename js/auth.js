@@ -106,6 +106,31 @@ const Auth = {
     window.authInit = Auth.init();
 
     document.addEventListener('DOMContentLoaded', () => {
+        // Sidebar Toggle Logic
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.querySelector('.sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+        if (menuToggle && sidebar && sidebarOverlay) {
+            menuToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('active');
+                sidebarOverlay.classList.toggle('active');
+            });
+
+            sidebarOverlay.addEventListener('click', () => {
+                sidebar.classList.remove('active');
+                sidebarOverlay.classList.remove('active');
+            });
+
+            // Close sidebar when clicking menu links on mobile
+            sidebar.querySelectorAll('.menu-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    sidebar.classList.remove('active');
+                    sidebarOverlay.classList.remove('active');
+                });
+            });
+        }
+
         document.addEventListener('click', (e) => {
             if (e.target.closest('#logoutBtn')) {
                 e.preventDefault();
