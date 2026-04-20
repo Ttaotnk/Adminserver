@@ -4,7 +4,7 @@
  */
 
 // ใช้ URL เดียวกับที่ Frontend ใช้ตามที่คุณให้อ่าน
-const API_BASE_URL = "https://nor-networking-forestry-objectives.trycloudflare.com/api";
+const API_BASE_URL = "https://rolls-corners-cuisine-covering.trycloudflare.com/api";
 const BACKEND_URL = API_BASE_URL.replace(/\/api$/, "");
 
 // กำหนดค่าให้ Global
@@ -28,7 +28,7 @@ window.resolveImageUrl = function (path) {
  */
 async function apiCall(endpoint, options = {}) {
     const token = localStorage.getItem('laoverse_jwt');
-    
+
     const headers = {
         'Content-Type': 'application/json',
         ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
