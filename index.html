@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | LaoVerse Admin</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+</head>
+<body>
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <div class="brand-logo">L</div>
+                <span style="font-size: 1.25rem; font-weight: 700;">LaoVerse Admin</span>
+            </div>
+            <ul class="sidebar-menu">
+                <li class="menu-item">
+                    <a href="index.html" class="menu-link active">
+                        <i class="fa-solid fa-chart-line"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="users.html" class="menu-link">
+                        <i class="fa-solid fa-users"></i>
+                        <span>Users Management</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="support.html" class="menu-link">
+                        <i class="fa-solid fa-headset"></i>
+                        <span>Support Requests</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="sidebar-footer">
+                <a href="#" id="logoutBtn" class="menu-link" style="color: #ef4444;">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Wrapper -->
+        <div class="main-wrapper">
+            <!-- Top Navbar -->
+            <nav class="top-navbar">
+                <div class="page-title">
+                    <h1>Dashboard</h1>
+                </div>
+                <div class="nav-actions">
+                    <div class="admin-user-profile">
+                        <div class="user-text" style="text-align: right;">
+                            <span id="adminName" style="display: block; font-weight: 600;">Admin</span>
+                            <small style="color: var(--text-muted); font-size: 0.75rem;">Administrator</small>
+                        </div>
+                        <img src="images/default-profile.png" alt="Profile" class="admin-pic">
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Content Body -->
+            <main class="content-body">
+                <!-- Stats Grid -->
+                <div class="stats-container">
+                    <div class="card-stat">
+                        <div class="stat-icon icon-blue">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Total Users</h3>
+                            <div class="stat-value" id="totalUsers">0</div>
+                        </div>
+                    </div>
+                    <div class="card-stat">
+                        <div class="stat-icon icon-green">
+                            <i class="fa-solid fa-file-lines"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Total Posts</h3>
+                            <div class="stat-value" id="totalPosts">0</div>
+                        </div>
+                    </div>
+                    <div class="card-stat">
+                        <div class="stat-icon icon-orange">
+                            <i class="fa-solid fa-envelope-open-text"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Open Support</h3>
+                            <div class="stat-value" id="totalSupport">0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity Section -->
+                <div class="section-card">
+                    <div class="card-header">
+                        <h2>Recent Activity</h2>
+                        <button class="btn btn-primary" style="font-size: 0.75rem;">View All</button>
+                    </div>
+                    <ul id="activityList" class="activity-list">
+                        <!-- Items loaded via dashboard.js -->
+                        <div style="padding: 2rem; text-align: center; color: var(--text-muted);">
+                            <i class="fa-solid fa-spinner fa-spin"></i> Loading activity...
+                        </div>
+                    </ul>
+                </div>
+            </main>
+        </div>
+    </div>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login | LaoVerse</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 1rem; }
+        .login-card { background: white; width: 100%; max-width: 420px; padding: 2.5rem; border-radius: 1.5rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
+        .login-header { text-align: center; margin-bottom: 2rem; }
+        .login-logo { width: 64px; height: 64px; background: var(--primary); color: white; border-radius: 1rem; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 800; margin: 0 auto 1.5rem; }
+        .login-header h2 { font-size: 1.5rem; font-weight: 700; color: var(--text-main); }
+        .form-group { margin-bottom: 1.25rem; }
+        .form-label { display: block; font-size: 0.875rem; font-weight: 600; margin-bottom: 0.5rem; }
+        .input-group { position: relative; }
+        .input-group i { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+        .input-control { width: 100%; padding: 0.75rem 1rem 0.75rem 2.5rem; border: 1px solid var(--border); border-radius: 0.75rem; outline: none; }
+        .login-btn { width: 100%; padding: 0.875rem; background: var(--primary); color: white; border: none; border-radius: 0.75rem; font-weight: 700; cursor: pointer; transition: all 0.2s; margin-top: 1rem; }
+        #loginMessage { margin-top: 1.25rem; text-align: center; font-size: 0.875rem; min-height: 1.25rem; }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <div class="login-header">
+            <div class="login-logo">L</div>
+            <h2>Admin Portal</h2>
+            <p>ເຂົ້າສູ່ລະບົບຈັດການ LaoVerse</p>
+        </div>
+        
+        <form id="loginForm">
+            <div class="form-group">
+                <label class="form-label">ຊື່ຜູ້ໃຊ້ (Username)</label>
+                <div class="input-group">
+                    <i class="fa-solid fa-user"></i>
+                    <input type="text" id="username" class="input-control" required placeholder="ປ້ອນຊື່ຜູ້ໃຊ້ຂອງທ່ານ">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">ລະຫັດຜ່ານ (Password)</label>
+                <div class="input-group">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" id="password" class="input-control" required placeholder="ປ້ອນລະຫັດຜ່ານ">
+                </div>
+            </div>
+            <button type="submit" class="login-btn">ເຂົ້າສູ່ລະບົບ</button>
+        </form>
+        <div id="loginMessage"></div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const messageEl = document.getElementById('loginMessage');
+            const btn = e.target.querySelector('button');
+            
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> ກໍາລັງກວດສອບ...';
+            messageEl.textContent = '';
+            
+            try {
+                // Use the centralized apiCall helper from api.js
+                const data = await apiCall('/login', {
+                    method: 'POST',
+                    body: { username, password }
+                });
+                
+                if (data && data.success) {
+                    localStorage.setItem('laoverse_jwt', data.token);
+                    messageEl.style.color = '#10b981';
+                    messageEl.innerHTML = '<i class="fa-solid fa-circle-check"></i> ສໍາເລັດ! ກໍາลັງກວດສອບສິດ...';
+
+                    // Verify admin role via check_auth
+                    const authData = await apiCall('/check_auth');
+                    
+                    if (authData && authData.success && authData.user.role === 'admin') {
+                        messageEl.innerHTML = '<i class="fa-solid fa-circle-check"></i> ຍິນດີຕ້ອນຮັບແອດມิน!';
+                        setTimeout(() => { window.location.href = 'index.html'; }, 800);
+                    } else {
+                        localStorage.removeItem('laoverse_jwt');
+                        messageEl.style.color = '#ef4444';
+                        messageEl.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> ຂໍອະໄພ: ທ່ານບໍ່ມີສິດເຂົ້າເຖິງລະບົບນີ້';
+                        btn.disabled = false;
+                        btn.textContent = 'ເຂົ້າສູ່ລະບົບ';
+                    }
+                } else {
+                    messageEl.style.color = '#ef4444';
+                    messageEl.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> ${data.message || 'ຊື່ຜູ້ໃຊ້ ຫຼື ລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ'}`;
+                    btn.disabled = false;
+                    btn.textContent = 'ເຂົ້າສູ່ລະບົບ';
+                }
+            } catch (err) {
+                console.error('Login error:', err);
+                messageEl.style.color = '#ef4444';
+                messageEl.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> ບໍ່ສາມາດເຊື່ອมຕໍ່กับ Server ได้';
+                btn.disabled = false;
+                btn.textContent = 'ເຂົ້າสູ່ລະບົບ';
+            }
+        });
+
+        // Check for error messages in URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const error = urlParams.get('error');
+        if (error) {
+            const messageEl = document.getElementById('loginMessage');
+            messageEl.style.color = '#f59e0b';
+            messageEl.textContent = error;
+        }
+    </script>
+</body>
+</html>
